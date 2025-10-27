@@ -13,7 +13,7 @@ tags:
   - ModelScope API
 platform: ModelScope Studio
 repository: https://www.modelscope.cn/studios/Datawhale/AI_assistant_Demo
-license: Apache-2.0
+license: Apache License 2.0
 keywords:
   - 化学教育
   - AI助手
