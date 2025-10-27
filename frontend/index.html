@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乡村化学教师AI教学助手</title>
+    
+    <!-- CSS 样式表 -->
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>乡村化学教师AI教学助手</h1>
+            <p>智能讲解 · 方程式配平 · 反应现象可视化 · 实验物质识别</p>
+        </div>
+
+        <!-- API Key 设置界面 -->
+        <div id="api-key-container" class="api-key-container">
+            <h2>设置API KEY</h2>
+            <p>请前往 <a href="https://www.modelscope.cn/my/myaccesstoken" target="_blank">https://www.modelscope.cn/my/myaccesstoken</a> 获取您的访问令牌</p>
+            <input type="text" id="api-key-input" class="api-key-input" placeholder="请输入您的 ModelScope API KEY">
+            <button id="save-api-key" class="btn">保存并进入主界面</button>
+        </div>
+
+        <!-- 主内容区域（初始隐藏） -->
+        <div id="main-content" class="main-content">
+            <div class="tabs">
+                <div class="tab active" data-tab="reaction-explain">化学反应智能讲解</div>
+                <div class="tab" data-tab="equation-balance">化学方程式自动配平</div>
+                <div class="tab" data-tab="reaction-image">反应现象文生图展示</div>
+                <div class="tab" data-tab="material-recognize">实验物质图生文识别</div>
+            </div>
+
+            <!-- 化学反应智能讲解 -->
+            <div id="reaction-explain" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">化学反应智能讲解</h2>
+                        <div class="tooltip">
+                            <span class="icon">ℹ️</span>
+                            <span class="tooltiptext">输入任意化学反应，系统将生成通俗易懂的反应原理说明</span>
+                        </div>
+                    </div>
+                    <div class="instructions">
+                        <h3>使用说明</h3>
+                        <ul class="feature-list">
+                            <li>输入化学反应名称或描述（如"铁与硫酸铜反应"）</li>
+                            <li>选择适用的教学阶段（初中/高中）</li>
+                            <li>点击"生成讲解"获取详细反应原理说明</li>
+                        </ul>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">请输入化学反应：</label>
+                        <input type="text" id="reaction-input" class="input-field" placeholder="例如：铁与硫酸铜反应">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">教学阶段：</label>
+                        <select id="education-level" class="input-field">
+                            <option value="junior">初中</option>
+                            <option value="senior">高中</option>
+                        </select>
+                    </div>
+                    <div class="btn-group">
+                        <button id="generate-reaction-explain" class="btn btn-primary">生成讲解</button>
+                        <button id="clear-reaction-explain" class="btn btn-secondary">清空</button>
+                    </div>
+                    <div id="reaction-explain-loading" class="loading">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">正在生成反应讲解，请稍候...</div>
+                    </div>
+                    <div id="reaction-explain-result" class="result-area" style="display: none;">
+                        <div class="result-title">反应讲解结果：</div>
+                        <div id="reaction-explain-content" class="result-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 化学方程式自动配平 -->
+            <div id="equation-balance" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">化学方程式自动配平</h2>
+                        <div class="tooltip">
+                            <span class="icon">ℹ️</span>
+                            <span class="tooltiptext">输入未配平的化学方程式，AI将自动完成配平</span>
+                        </div>
+                    </div>
+                    <div class="instructions">
+                        <h3>使用说明</h3>
+                        <ul class="feature-list">
+                            <li>输入未配平的化学方程式（如"Fe + O2 → Fe2O3"）</li>
+                            <li>点击"配平方程式"获取配平结果和步骤</li>
+                            <li>支持查看详细的配平过程</li>
+                        </ul>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">请输入未配平的化学方程式：</label>
+                        <input type="text" id="equation-input" class="input-field" placeholder="例如：Fe + O2 → Fe2O3">
+                    </div>
+                    <div class="btn-group">
+                        <button id="balance-equation" class="btn btn-primary">配平方程式</button>
+                        <button id="clear-equation" class="btn btn-secondary">清空</button>
+                    </div>
+                    <div id="equation-balance-loading" class="loading">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">正在配平方程式，请稍候...</div>
+                    </div>
+                    <div id="equation-balance-result" class="result-area" style="display: none;">
+                        <div class="result-title">配平结果：</div>
+                        <div id="equation-balance-content" class="result-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 反应现象文生图展示 -->
+            <div id="reaction-image" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">反应现象文生图展示</h2>
+                        <div class="tooltip">
+                            <span class="icon">ℹ️</span>
+                            <span class="tooltiptext">根据反应描述生成逼真的化学反应现象图像</span>
+                        </div>
+                    </div>
+                    <div class="instructions">
+                        <h3>使用说明</h3>
+                        <ul class="feature-list">
+                            <li>输入反应现象描述（如"产生红棕色沉淀"）</li>
+                            <li>点击"生成图像"获取对应的反应现象图片</li>
+                            <li>可用于课堂直观展示实验效果</li>
+                        </ul>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">请输入反应现象描述：</label>
+                        <input type="text" id="image-prompt-input" class="input-field" placeholder="例如：产生红棕色沉淀，剧烈冒泡并放热">
+                    </div>
+                    <div class="btn-group">
+                        <button id="generate-image" class="btn btn-primary">生成图像</button>
+                        <button id="clear-image" class="btn btn-secondary">清空</button>
+                    </div>
+                    <div id="image-generation-loading" class="loading">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">正在生成图像，请稍候...</div>
+                    </div>
+                    <div id="image-generation-result" class="result-area" style="display: none;">
+                        <div class="result-title">生成的反应现象图像：</div>
+                        <img id="generated-image" class="image-result" src="" alt="生成的反应现象图像" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 实验物质图生文识别 -->
+            <div id="material-recognize" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">实验物质图生文识别</h2>
+                        <div class="tooltip">
+                            <span class="icon">ℹ️</span>
+                            <span class="tooltiptext">上传化学物质或实验器材图片，AI将自动识别并提供说明</span>
+                        </div>
+                    </div>
+                    <div class="instructions">
+                        <h3>使用说明</h3>
+                        <ul class="feature-list">
+                            <li>上传常见化学物质或实验器材的图片</li>
+                            <li>AI将自动识别物质并生成简明说明</li>
+                            <li>包括可能的化学名称、性质及安全制备方法</li>
+                        </ul>
+                    </div>
+                    <!-- 物质识别布局：图片在上，按钮在中间，结果在下 -->
+                    <div class="material-recognition-wrapper">
+                        <!-- 图片预览區域 -->
+                        <div class="material-image-container">
+                            <img id="material-image-preview" class="material-image-preview" alt="选择的图片预览">
+                            <div id="material-image-placeholder" class="material-image-placeholder">图片预览区域</div>
+                        </div>
+                        
+                        <!-- 按钮行 -->
+                        <div class="file-upload-and-buttons">
+                            <div class="file-upload-inline">
+                                <input type="file" id="material-image-input" class="file-input" accept="image/*">
+                                <label for="material-image-input" class="file-label">选择图片</label>
+                                <span id="file-name" class="file-name">未选择文件</span>
+                            </div>
+                            <div class="btn-group-horizontal">
+                                <button id="recognize-material" class="btn btn-primary">识别物质</button>
+                                <button id="clear-material" class="btn btn-secondary">清空</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 此处是加载动画 -->
+                        <div id="material-recognition-loading" class="loading">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">正在识别物质，请稍候...</div>
+                        </div>
+                        
+                        <!-- 识别结果 -->
+                        <div id="material-recognition-result" class="result-area" style="display: none;">
+                            <div class="result-title">识别结果：</div>
+                            <div id="material-recognition-content" class="result-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 错误消息 -->
+            <div id="error-message" class="error-message"></div>
+            <!-- 成功消息 -->
+            <div id="success-message" class="success-message"></div>
+        </div>
+
+        <div class="footer">
+            <p>乡村化学教师AI教学助手 © 2024 | 专为乡村教育设计，提升教学效率，弥补实验资源不足</p>
+        </div>
+    </div>
+
+    <!-- 引入 JavaScript 模块 -->
+    <script>
+        console.log('=== 开始加载 JavaScript 模块 ===');
+        console.log('document.readyState:', document.readyState);
+    </script>
+    <script src="assets/js/config.js"></script>
+    <script>
+        console.log('config.js 已加载, CONFIG:', typeof CONFIG !== 'undefined' ? '✓' : '✗');
+    </script>
+    <script src="assets/js/api.js"></script>
+    <script>
+        console.log('api.js 已加载, APIService:', typeof APIService !== 'undefined' ? '✓' : '✗');
+    </script>
+    <script src="assets/js/ui.js"></script>
+    <script>
+        console.log('ui.js 已加载, UIService:', typeof UIService !== 'undefined' ? '✓' : '✗');
+    </script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        console.log('app.js 已加载, App:', typeof App !== 'undefined' ? '✓' : '✗');
+    </script>
+    <script>
+        // 全局错误处理
+        window.addEventListener('error', (event) => {
+            console.error('[Global Error]', event.error);
+        });
+        
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('[Unhandled Promise Rejection]', event.reason);
+        });
+    </script>
+</body>
+</html>
