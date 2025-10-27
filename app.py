@@ -25,6 +25,8 @@ import threading
 from pathlib import Path
 import signal
 
+from backend.main import app
+
 
 # 全局变量，用于存储进程
 backend_process = None
