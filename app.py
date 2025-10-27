@@ -84,46 +84,35 @@ def check_dependencies():
     return True	
  	
  	
-def start_backend():	
-    """启动FastAPI后端服务"""	
+def start_backend():
+    """启动FastAPI后端服务"""
     global backend_process	
-    	
     print("=" * 60)	
     print("🚀 启动FastAPI后端服务（端口5000）...")	
     print("=" * 60)	
-    	
-    # 确定工作目录	
     workspace_root = Path(__file__).parent	
     os.chdir(workspace_root)	
-    	
-    # 启动命令	
-    cmd = [	
-        sys.executable,	
-        '-m',	
-        'uvicorn',	
-        'backend.main:app',	
-        '--reload',	
-        '--host', '0.0.0.0',	
-        '--port', '5000'	
+    cmd = [
+        sys.executable,
+        '-m',
+        'uvicorn',
+        'backend.main:app',
+        '--reload',  # 开发模式，会打印详细错误
+        '--host', '0.0.0.0',
+        '--port', '5000'
     ]	
-    	
     print(f"工作目录: {workspace_root}")	
     print(f"启动命令: {' '.join(cmd)}\n")	
-    	
-    try:	
-        # 启动后端进程	
-        backend_process = subprocess.Popen(	
-            cmd,	
-            stdout=subprocess.PIPE,	
-            stderr=subprocess.PIPE,	
-            cwd=workspace_root,	
-            text=True,	
-            bufsize=1	
+    
+    try:
+        # 关键修改：stdout/stderr不重定向到PIPE，直接打印到控制台
+        backend_process = subprocess.Popen(
+            cmd,
+            cwd=workspace_root,
+            text=True
         )	
-        	
         print("✓ 后端服务进程已启动（PID: {}）\n".format(backend_process.pid))	
         return True	
-        	
     except Exception as e:	
         print(f"❌ 后端启动失败: {e}\n")	
         return False	
