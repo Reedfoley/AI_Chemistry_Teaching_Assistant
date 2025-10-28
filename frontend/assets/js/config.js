@@ -5,8 +5,15 @@
 
 const CONFIG = {
     // Python 后端配置
+    // 根据当前网页的主機URL自动需求后端配置
     PYTHON_BACKEND: {
-        BASE_URL: 'http://localhost:5000',
+        BASE_URL: (() => {
+            // 如果有环境变量设置（鄚搋初有应用中）
+            const backendUrl = window.BACKEND_URL || 
+                            new URLSearchParams(window.location.search).get('backend_url') ||
+                            `http://${window.location.hostname}:5000`;
+            return backendUrl;
+        })(),
         ENDPOINTS: {
             REACTION_EXPLAIN: '/api/reaction/explain',
             EQUATION_BALANCE: '/api/equation/balance',
