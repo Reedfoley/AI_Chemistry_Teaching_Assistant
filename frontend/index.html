@@ -224,6 +224,11 @@
     <script>
         console.log('=== 开始加载 JavaScript 模块 ===');
         console.log('document.readyState:', document.readyState);
+        
+        // 可选：在此处设置后端 URL（用于特殊部署场景）
+        // 优先级：window.BACKEND_URL > URL参数(?backend_url=...) > 默认(hostname:5000)
+        // 示例：
+        // window.BACKEND_URL = 'http://api.example.com:7860';
     </script>
     <script src="assets/js/config.js"></script>
     <script>

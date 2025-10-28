@@ -87,8 +87,11 @@ def start_backend():
     """启动FastAPI后端服务"""
     global backend_process
     
+    # 从环境变量获取后端端口，默认为5000
+    backend_port = os.environ.get('BACKEND_PORT', '5000')
+    
     print("=" * 60)
-    print("🚀 启动FastAPI后端服务（端口5000）...")
+    print(f"🚀 启动FastAPI后端服务（端口{backend_port}）...")
     print("=" * 60)
     
     # 确定工作目录
@@ -103,7 +106,7 @@ def start_backend():
         'backend.main:app',
         '--reload',
         '--host', '0.0.0.0',
-        '--port', '5000'
+        '--port', backend_port
     ]
     
     print(f"工作目录: {workspace_root}")
@@ -132,8 +135,11 @@ def start_frontend():
     """启动前端HTTP服务器"""
     global frontend_process
     
+    # 从环境变量获取前端端口，默认为8000
+    frontend_port = os.environ.get('FRONTEND_PORT', '8000')
+    
     print("=" * 60)
-    print("🎨 启动前端HTTP服务器（端口8000）...")
+    print(f"🎨 启动前端HTTP服务器（端口{frontend_port}）...")
     print("=" * 60)
     
     # 确定前端目录
@@ -145,7 +151,7 @@ def start_frontend():
         sys.executable,
         '-m',
         'http.server',
-        '8000',
+        frontend_port,
         '--directory', str(frontend_dir)
     ]
     
@@ -180,29 +186,37 @@ def open_browser():
     # 等待服务启动
     time.sleep(3)
     
+    # 获取前端端口
+    frontend_port = os.environ.get('FRONTEND_PORT', '8000')
+    
     try:
         # 尝试打开前端
-        webbrowser.open('http://localhost:8000')
-        print("✓ 已在浏览器中打开前端应用\n")
+        url = f'http://localhost:{frontend_port}'
+        webbrowser.open(url)
+        print(f"✓ 已在浏览器中打开前端应用：{url}\n")
     except Exception as e:
         print(f"⚠️ 打开浏览器失败: {e}\n")
 
 
 def log_service_info():
     """输出服务信息"""
+    # 获取动态端口
+    frontend_port = os.environ.get('FRONTEND_PORT', '8000')
+    backend_port = os.environ.get('BACKEND_PORT', '5000')
+    
     print("=" * 60)
     print("📊 服务信息")
     print("=" * 60)
     print("\n🎨 前端服务:")
-    print("   URL: http://localhost:8000")
-    print("   入口: http://localhost:8000/index.html\n")
+    print(f"   URL: http://localhost:{frontend_port}")
+    print(f"   入口: http://localhost:{frontend_port}/index.html\n")
     
     print("🔌 后端API服务:")
-    print("   基础URL: http://localhost:5000")
-    print("   API文档（Swagger）: http://localhost:5000/docs")
-    print("   API文档（ReDoc）: http://localhost:5000/redoc")
-    print("   健康检查: http://localhost:5000/api/health")
-    print("   配置信息: http://localhost:5000/api/config\n")
+    print(f"   基础URL: http://localhost:{backend_port}")
+    print(f"   API文档（Swagger）: http://localhost:{backend_port}/docs")
+    print(f"   API文档（ReDoc）: http://localhost:{backend_port}/redoc")
+    print(f"   健康检查: http://localhost:{backend_port}/api/health")
+    print(f"   配置信息: http://localhost:{backend_port}/api/config\n")
     
     print("⚙️  功能接口:")
     print("   - POST /api/reaction/explain         - 化学反应智能讲解")
