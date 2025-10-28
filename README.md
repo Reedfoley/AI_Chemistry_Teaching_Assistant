@@ -22,6 +22,7 @@ keywords:
   - 智能讲解
 created: 2025-10-27
 updated: 2025-10-27
+entry_file：gradio_app.py
 ---
 
 # 乡村化学教师AI教学助手
