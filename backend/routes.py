@@ -64,14 +64,12 @@ async def explain_reaction(request: ReactionExplainRequest) -> Response:
     
     Example:
         {
-            "reaction": "铁与硫酸铜反应",
-            "level": "junior"
+            "reaction": "铁与硫酸铜反应"
         }
     """
     try:
         explanation = ChemistryService.explain_reaction(
             reaction=request.reaction,
-            level=request.level,
             api_key=request.api_key
         )
         # 返回哯持但不超时的响应

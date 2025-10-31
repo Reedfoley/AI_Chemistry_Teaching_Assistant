@@ -27,7 +27,6 @@ const UIService = {
                 
                 // 化学反应讲解
                 reactionInput: document.getElementById('reaction-input'),
-                educationLevel: document.getElementById('education-level'),
                 generateReactionExplainBtn: document.getElementById('generate-reaction-explain'),
                 clearReactionExplainBtn: document.getElementById('clear-reaction-explain'),
                 reactionExplainLoading: document.getElementById('reaction-explain-loading'),
@@ -188,10 +187,6 @@ const UIService = {
     
     getReactionInput() {
         return this.elements.reactionInput.value.trim();
-    },
-    
-    getEducationLevel() {
-        return this.elements.educationLevel.value;
     },
     
     setReactionExplainResult(content) {

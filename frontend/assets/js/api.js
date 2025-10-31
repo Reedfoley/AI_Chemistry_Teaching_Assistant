@@ -7,12 +7,11 @@ const APIService = {
     /**
      * 化学反应智能讲解
      * @param {string} reaction - 化学反应描述
-     * @param {string} level - 教学阶段 (junior/senior)
      * @param {string} apiKey - API Key
      * @returns {Promise<string>} 反应讲解
      */
-    async explainReaction(reaction, level, apiKey) {
-        return this._explainReactionPython(reaction, level, apiKey);
+    async explainReaction(reaction, apiKey) {
+        return this._explainReactionPython(reaction, apiKey);
     },
     
     /**
@@ -47,12 +46,11 @@ const APIService = {
     
     // ==================== Python 后端实现 ====================
     
-    async _explainReactionPython(reaction, level, apiKey) {
+    async _explainReactionPython(reaction, apiKey) {
         return this._fetchPythonAPI(
             CONFIG.PYTHON_BACKEND.ENDPOINTS.REACTION_EXPLAIN,
             {
                 reaction: reaction,
-                level: level,
                 api_key: apiKey
             }
         );

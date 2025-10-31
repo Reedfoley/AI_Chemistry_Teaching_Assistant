@@ -22,14 +22,6 @@ const CONFIG = {
         }
     },
     
-    // 教学阶段
-    EDUCATION_LEVELS: {
-        JUNIOR: 'junior',
-        SENIOR: 'senior',
-        JUNIOR_NAME: '初中',
-        SENIOR_NAME: '高中'
-    },
-    
     // 超时时间
     TIMEOUTS: {
         SHORT: 5000,    // 5秒

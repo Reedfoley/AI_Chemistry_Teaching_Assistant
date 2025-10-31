@@ -11,13 +11,11 @@ from typing import Optional, List, Any, Literal
 class ReactionExplainRequest(BaseModel):
     """化学反应讲解请求"""
     reaction: str = Field(..., min_length=1, description="反应描述")
-    level: Literal["junior", "senior"] = Field(..., description="教学等级: junior(初中) / senior(高中)")
     api_key: str = Field(..., min_length=1, description="ModelScope API密钥（必需）")
 
     class Config:
         example = {
-            "reaction": "铁与硫酸铜反应",
-            "level": "junior"
+            "reaction": "铁与硫酸铜反应"
         }
 
 

@@ -165,7 +165,6 @@ const App = {
     
     async handleGenerateReactionExplanation() {
         const reaction = UIService.getReactionInput();
-        const level = UIService.getEducationLevel();
         
         if (!reaction) {
             UIService.showError('请输入化学反应描述');
@@ -176,7 +175,7 @@ const App = {
             UIService.showReactionExplainLoading();
             UIService.clearMessages();
             
-            const result = await APIService.explainReaction(reaction, level, this.apiKey);
+            const result = await APIService.explainReaction(reaction, this.apiKey);
             UIService.setReactionExplainResult(result);
             UIService.showSuccess('反应讲解生成成功！');
         } catch (error) {
