@@ -34,7 +34,7 @@
                 <div class="tab active" data-tab="reaction-explain">化学反应智能讲解</div>
                 <div class="tab" data-tab="equation-balance">化学方程式自动配平</div>
                 <div class="tab" data-tab="reaction-image">反应现象文生图展示</div>
-                <div class="tab" data-tab="material-recognize">实验物质图生文识别</div>
+                <div class="tab" data-tab="material-recognize">实验物质识别</div>
             </div>
 
             <!-- 化学反应智能讲解 -->
@@ -148,11 +148,11 @@
                 </div>
             </div>
 
-            <!-- 实验物质图生文识别 -->
+            <!-- 实验物质识别 -->
             <div id="material-recognize" class="tab-content">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">实验物质图生文识别</h2>
+                        <h2 class="card-title">实验物质识别</h2>
                         <div class="tooltip">
                             <span class="icon">ℹ️</span>
                             <span class="tooltiptext">上传化学物质或实验器材图片，AI将自动识别并提供说明</span>
@@ -166,28 +166,24 @@
                             <li>包括可能的化学名称、性质及安全制备方法</li>
                         </ul>
                     </div>
-                    <!-- 物质识别布局：图片在上，按钮在中间，结果在下 -->
+                    <!-- 物质识别布局 -->
                     <div class="material-recognition-wrapper">
-                        <!-- 图片预览區域 -->
+                        <!-- 图片预览区域（带覆盖的选择按钮） -->
                         <div class="material-image-container">
                             <img id="material-image-preview" class="material-image-preview" alt="选择的图片预览">
-                            <div id="material-image-placeholder" class="material-image-placeholder">图片预览区域</div>
-                        </div>
-                        
-                        <!-- 按钮行 -->
-                        <div class="file-upload-and-buttons">
-                            <div class="file-upload-inline">
+                            <div id="material-image-placeholder" class="material-image-placeholder">
                                 <input type="file" id="material-image-input" class="file-input" accept="image/*">
-                                <label for="material-image-input" class="file-label">选择图片</label>
-                                <span id="file-name" class="file-name">未选择文件</span>
-                            </div>
-                            <div class="btn-group-horizontal">
-                                <button id="recognize-material" class="btn btn-primary">识别物质</button>
-                                <button id="clear-material" class="btn btn-secondary">清空</button>
+                                <label for="material-image-input" class="file-label-overlay">选择图片</label>
                             </div>
                         </div>
                         
-                        <!-- 此处是加载动画 -->
+                        <!-- 识别和清空按钮 -->
+                        <div class="btn-group-horizontal">
+                            <button id="recognize-material" class="btn btn-primary">识别物质</button>
+                            <button id="clear-material" class="btn btn-secondary">清空</button>
+                        </div>
+                        
+                        <!-- 加载动画 -->
                         <div id="material-recognition-loading" class="loading">
                             <div class="loading-spinner"></div>
                             <div class="loading-text">正在识别物质，请稍候...</div>
@@ -209,7 +205,7 @@
         </div>
 
         <div class="footer">
-            <p>乡村化学教师AI教学助手 © 2024 | 专为乡村教育设计，提升教学效率，弥补实验资源不足</p>
+            <p>乡村化学教师AI教学助手 © 2025 | 专为乡村教育设计，提升教学效率，弥补实验资源不足</p>
         </div>
     </div>
 
@@ -217,6 +213,8 @@
     <script>
         console.log('=== 开始加载 JavaScript 模块 ===');
         console.log('document.readyState:', document.readyState);
+        console.log('main-content 元素:', document.getElementById('main-content') ? '✓ 存在' : '✗ 不存在');
+        console.log('api-key-container 元素:', document.getElementById('api-key-container') ? '✓ 存在' : '✗ 不存在');
         
         // 可选：在此处设置后端 URL（用于特殊部署场景）
         // 优先级：window.BACKEND_URL > URL参数(?backend_url=...) > 默认(hostname:5000)

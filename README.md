@@ -23,556 +23,408 @@ keywords:
   - Gradio应用
 created: 2025-10-27
 updated: 2025-10-31
-entry_file: gradio_app.py
 ---
 
-# 乡村化学教师AI教学助手
+# 🧪 乡村化学教师AI教学助手
 
-> 智能讲解 · 方程式配平 · 反应现象可视化 · 实验物质识别
+一个为乡村教育设计的智能化学教学辅助系统，利用大模型技术提升教学效率，弥补实验资源不足。
 
-一个专为乡村教育设计的智能化学教学辅助系统，利用大语言模型和视觉AI技术，帮助化学教师提升教学效率，弥补实验资源不足的问题。
+## ✨ 核心功能
 
-## 🌟 核心功能
+### 1. 🎓 化学反应智能讲解
+- 输入化学反应名称或描述
+- 获取通俗易懂的反应原理说明
+- 适配不同学龄的讲解深度
 
-### 1. 化学反应智能讲解
+### 2. ⚖️ 化学方程式自动配平
+- 输入未配平的化学方程式
+- 自动完成配平并显示步骤
+- 支持复杂多步反应
 
-- 输入任意化学反应名称或描述
-- 生成通俗易懂的反应原理说明
-- **示例**: 输入"铁与硫酸铜反应" → 获得详细的反应机制、条件和应用意义
+### 3. 🎨 反应现象文生图展示
+- 输入反应现象描述
+- 生成逼真的反应现象图像
+- 用于课堂直观展示实验效果
 
-### 2. 化学方程式自动配平
-
-- 支持输入未配平的化学方程式
-- 自动完成配平并返回平衡方程式
-- 提供详细的配平步骤说明
-- **示例**: 输入"Fe + O2 → Fe2O3" → 生成"4Fe + 3O2 → 2Fe2O3"及配平过程
-
-### 3. 反应现象文生图展示
-
-- 根据反应现象描述生成逼真的化学反应图像
-- AI优化提示词，生成高保真的实验现象图片
-- 可用于课堂直观展示实验效果
-- **示例**: 输入"产生红棕色沉淀，剧烈冒泡" → 生成对应的反应现象图像
-
-### 4. 实验物质图生文识别
-
-- 上传化学物质或实验器材的图片
+### 4. 🔍 实验物质识别
+- 上传化学物质或实验器材图片
 - AI自动识别物质并生成说明
-- 包括化学名称、性质、准备方法和安全指南
-- **示例**: 上传化学试剂图片 → 识别物质并获得详细信息
+- 包括化学名称、性质及安全信息
 
 ## 📋 项目结构
 
-```tree
-.
-├── gradio_app.py            # Gradio UI应用入口（创空间部署用）
-│
-├── frontend/                # 原生HTML5前端（本地开发用）
-│   ├── assets/
-│   │   ├── css/             # CSS样式文件
-│   │   │   ├── variables.css      # CSS变量定义
-│   │   │   ├── base.css           # 基础样式
-│   │   │   ├── layout.css         # 布局样式
-│   │   │   ├── components.css     # 组件样式
-│   │   │   ├── animations.css     # 动画效果
-│   │   │   └── responsive.css     # 响应式设计
-│   │   └── js/              # JavaScript模块
-│   │       ├── config.js          # 配置管理
-│   │       ├── api.js             # API通信
-│   │       ├── ui.js              # UI交互
-│   │       └── app.js             # 应用主逻辑
-│   └── index.html           # 主页面入口
-│
-├── backend/                 # FastAPI后端（核心服务）
-│   ├── __init__.py
-│   ├── main.py              # FastAPI应用主入口
-│   ├── routes.py            # API路由定义
-│   ├── models.py            # Pydantic数据模型
-│   ├── services.py          # 业务逻辑统一入口
-│   ├── reaction_explainer.py      # 反应讲解模块
-│   ├── equation_balancer.py       # 方程式配平模块
-│   ├── reaction_image_generator.py # 文生图模块
-│   └── material_recognizer.py     # 物质识别模块
-│
-├── app.py                   # 统一启动脚本（Python）
-├── app.bat                  # Windows启动脚本
-├── app.sh                   # Linux/Mac启动脚本
-├── backend_start.py         # 后端独立启动脚本
-├── .modelscope_config.json  # 创空间部署配置
-├── requirements.txt         # Python依赖清单
-└── README.md                # 项目文档
 ```
-
-## 🏗️ 架构说明
-
-### 部署模式
-
-项目支持两种部署模式：
-
-| 模式 | 入口文件 | 用途 | 环境 |
-|------|---------|------|------|
-| **Gradio UI** | `gradio_app.py` | 创空间在线部署 | 云端 |
-| **HTML5前端** | `frontend/index.html` | 本地开发测试 | 本地 |
-
-### 后端四层架构
-
-后端采用标准四层分层架构，确保代码职责分离：
-
-1. **应用层 (main.py)**
-   - FastAPI应用初始化
-   - CORS中间件配置
-   - 异常处理器设置
-   - 启动/关闭事件
-
-2. **路由层 (routes.py)**
-   - HTTP API端点定义
-   - 请求验证和响应封装
-   - 健康检查和配置接口
-
-3. **数据模型层 (models.py)**
-   - Pydantic请求/响应模型
-   - 数据验证规则
-   - API文档定义
-
-4. **业务逻辑层 (services.py + 功能模块)**
-   - services.py：统一服务入口
-   - reaction_explainer.py：化学反应讲解
-   - equation_balancer.py：方程式配平
-   - reaction_image_generator.py：文生图功能
-   - material_recognizer.py：物质识别
-
-
+AI_Chemistry_Teaching_Assistant/
+├── backend/                    # FastAPI 后端服务
+│   ├── main.py                # 应用主文件
+│   ├── routes.py              # API 路由定义
+│   ├── models.py              # 数据模型
+│   ├── services.py            # 业务逻辑服务
+│   ├── reaction_explainer.py  # 反应讲解模块
+│   ├── equation_balancer.py   # 方程式配平模块
+│   ├── reaction_image_generator.py  # 图像生成模块
+│   └── material_recognizer.py # 物质识别模块
+│
+├── frontend/                   # 前端应用
+│   ├── index.html             # 主页面
+│   └── assets/
+│       ├── css/               # 样式文件
+│       │   ├── variables.css
+│       │   ├── base.css
+│       │   ├── layout.css
+│       │   ├── components.css
+│       │   ├── animations.css
+│       │   └── responsive.css
+│       └── js/                # JavaScript 文件
+│           ├── config.js      # 配置文件
+│           ├── api.js         # API 调用
+│           ├── ui.js          # UI 操作
+│           └── app.js         # 应用主逻辑
+│
+├── app.py                      # Gradio 应用（魔搭平台部署）
+├── app.bat                     # Windows 启动脚本
+├── app.sh                      # macOS/Linux 启动脚本
+├── start_app.py                # Python 统一启动脚本
+├── backend_start.py            # 后端单独启动脚本
+├── frontend_start.py           # 前端单独启动脚本
+├── requirements.txt            # Python 依赖
+└── README.md                   # 项目说明
+```
 
 ## 🚀 快速开始
 
 ### 前置要求
 
-- Python 3.8+ 或 3.10+
-- 现代Web浏览器（Chrome、Firefox、Edge等）
-- ModelScope API密钥（[获取地址](https://www.modelscope.cn/my/myaccesstoken)）
+- Python 3.7+
+- pip 包管理器
+- ModelScope API Key（获取地址：https://www.modelscope.cn/my/myaccesstoken）
 
 ### 安装依赖
 
 ```bash
-# 推荐使用虚拟环境
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# 或
-venv\Scripts\activate     # Windows PowerShell
-
-# 安装所有依赖
 pip install -r requirements.txt
 ```
 
 ### 启动应用
 
-#### 方式一：Gradio UI（推荐用于创空间部署）
+#### 方式一：Python 统一启动（推荐）
 
 ```bash
-# 启动Gradio应用（自动打开浏览器）
-python gradio_app.py
-
-# 访问地址：http://localhost:7860
+python start_app.py
 ```
 
-#### 方式二：HTML5前端 + FastAPI后端（推荐用于本地开发）
+这会同时启动：
+- 前端服务：http://127.0.0.1:8000
+- 后端服务：http://127.0.0.1:5000
+- 自动打开浏览器
+
+#### 方式二：分别启动
 
 **启动后端：**
-
 ```bash
-# 方式1：使用统一启动脚本
-python app.py
-
-# 方式2：后端独立启动
 python backend_start.py
-
-# 方式3：直接运行FastAPI
-cd backend
-python main.py
-# 或
-uvicorn main:app --reload --port 5000
 ```
+后端地址：http://127.0.0.1:5000
+API 文档：http://127.0.0.1:5000/docs
 
-**启动前端：**
+**启动前端（新终端）：**
+```bash
+python frontend_start.py
+```
+前端地址：http://127.0.0.1:8000
 
-在另一个终端中，启动前端HTTP服务器：
+#### 方式三：Windows 批处理脚本
 
 ```bash
-# Python内置HTTP服务器
-python -m http.server 8000 --directory frontend
-
-# 访问地址：http://localhost:8000
+app.bat
 ```
 
-### 配置API Key
-
-1. 前往 [ModelScope控制台](https://www.modelscope.cn/my/myaccesstoken) 获取您的API密钥
-2. 在应用首页的"设置API KEY"界面输入并保存
-3. 验证成功后即可开始使用
-
-
-## 🔧 API参数详解
-
-### 1. 化学反应讲解接口
-
-**端点:** `POST /api/reaction/explain`
-
-**请求参数:**
-```json
-{
-  "reaction": "铁与硫酸铜反应",
-  "api_key": "your_modelscope_api_key"
-}
-```
-
-| 参数 | 类型 | 说明 | 示例 |
-|------|------|------|------|
-| reaction | string | 化学反应描述 | "铁与硫酸铜反应" |
-| api_key | string | ModelScope API密钥 | 必需 |
-
-**响应示例:**
-```json
-{
-  "success": true,
-  "data": "铁与硫酸铜反应是一个置换反应。反应方程式为：Fe + CuSO4 → FeSO4 + Cu..."
-}
-```
-
-### 2. 方程式配平接口
-
-**端点:** `POST /api/equation/balance`
-
-**请求参数:**
-```json
-{
-  "equation": "Fe + O2 → Fe2O3",
-  "api_key": "your_modelscope_api_key"
-}
-```
-
-| 参数 | 类型 | 说明 | 示例 |
-|------|------|------|------|
-| equation | string | 未配平的方程式 | "Fe + O2 → Fe2O3" |
-| api_key | string | ModelScope API密钥 | 必需 |
-
-**响应示例:**
-```json
-{
-  "success": true,
-  "data": {
-    "balanced_equation": "4Fe + 3O2 → 2Fe2O3",
-    "steps": ["1. 氧原子: 右边2个，左边需要3个O2...", "2. 铁原子: 左边4个，右边需要2个Fe2O3..."]
-  }
-}
-```
-
-### 3. 反应现象图像生成接口
-
-**端点:** `POST /api/reaction/image`
-
-**请求参数:**
-```json
-{
-  "prompt": "产生红棕色沉淀，剧烈冒泡并放热",
-  "api_key": "your_modelscope_api_key"
-}
-```
-
-| 参数 | 类型 | 说明 | 示例 |
-|------|------|------|------|
-| prompt | string | 反应现象描述 | "产生红棕色沉淀，剧烈冒泡" |
-| api_key | string | ModelScope API密钥 | 必需 |
-
-**响应示例:**
-```json
-{
-  "success": true,
-  "data": "https://api-inference.modelscope.cn/...image_url..."
-}
-```
-
-### 4. 物质识别接口
-
-**端点:** `POST /api/material/recognize`
-
-**请求参数:**
-```json
-{
-  "image_url": "data:image/jpeg;base64,...",
-  "api_key": "your_modelscope_api_key"
-}
-```
-
-| 参数 | 类型 | 说明 | 示例 |
-|------|------|------|------|
-| image_url | string | 图片URL或Base64编码 | data URL 或 http URL |
-| api_key | string | ModelScope API密钥 | 必需 |
-
-**响应示例:**
-```json
-{
-  "success": true,
-  "data": {
-    "name": "硫酸铜",
-    "aliases": ["CuSO4"],
-    "properties": "蓝色晶体，易溶于水...",
-    "preparation": "通常由铜与浓硫酸反应得到...",
-    "safety": "有毒，避免接触皮肤..."
-  }
-}
-```
-
-## 📱 技术栈
-
-### 前端
-- **HTML5** - 页面结构
-- **CSS3** - 样式美化（Flexbox、Grid、CSS变量）
-- **JavaScript (ES6+)** - 交互逻辑
-- **无框架** - 原生实现，轻量级
-- **Gradio** - AI应用UI框架（创空间部署）
-
-### 后端
-- **Python 3.8+** - 编程语言
-- **FastAPI** - 高性能Web框架
-- **Uvicorn** - ASGI服务器
-- **Pydantic** - 数据验证
-- **LangChain** - AI工具链框架
-- **ModelScope API** - 大语言模型服务
-
-### 使用的AI模型
-- **Qwen/Qwen3-VL-30B-A3B-Instruct** - 文本和图像理解
-- **FLUX.1-Krea-dev** - 文本到图像生成
-
-### 外部服务
-- **ModelScope** - 提供API接口和模型调用
-- **HTTPS** - 安全通信协议
-
-
-## ⚙️ 配置说明
-
-### 前端超时配置 (config.js)
-
-根据网络情况调整API超时时间：
-```javascript
-MEDIUM_TIMEOUT = 120000   // 中等超时：120秒
-LONG_TIMEOUT = 300000     // 长超时：300秒
-```
-
-### 后端HTTP连接保活
-
-所有API响应包含以下头部，支持长连接：
-```
-Connection: keep-alive
-Keep-Alive: timeout=300, max=1000
-```
-
-### 跨域配置 (CORS)
-
-FastAPI 已配置CORS中间件，允许跨域请求：
-```python
-allow_origins = ["*"]  # 开发环境
-allow_methods = ["*"]
-allow_headers = ["*"]
-```
-
-## 🔌 集成示例
-
-### Python 后端调用
-
-```python
-import requests
-import json
-
-BASE_URL = "http://localhost:5000"
-API_KEY = "your_modelscope_api_key"
-
-# 讲解化学反应
-response = requests.post(
-    f"{BASE_URL}/api/reaction/explain",
-    json={
-        "reaction": "铁与硫酸铜反应",
-        "api_key": API_KEY
-    },
-    timeout=120
-)
-print(response.json())
-```
-
-### JavaScript 前端调用
-
-```javascript
-const apiKey = localStorage.getItem('api_key');
-
-fetch('http://localhost:5000/api/reaction/explain', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        reaction: '铁与硫酸铜反应',
-        api_key: apiKey
-    })
-})
-.then(res => res.json())
-.then(data => console.log(data.data));
-```
-
-### cURL 命令测试
+#### 方式四：macOS/Linux Shell 脚本
 
 ```bash
-# 测试健康检查
-curl http://localhost:5000/api/health
+bash app.sh
+```
 
-# 测试讲解接口
-curl -X POST http://localhost:5000/api/reaction/explain \
-  -H "Content-Type: application/json" \
-  -d '{
+#### 方式五：直接打开 HTML
+
+在文件浏览器中双击 `frontend/index.html` 即可打开应用。
+
+#### 方式六：Gradio 应用（魔搭平台部署）
+
+```bash
+python app.py
+```
+
+## 📖 使用指南
+
+### 1. 设置 API Key
+
+首次使用时需要设置 ModelScope API Key：
+
+1. 访问 https://www.modelscope.cn/my/myaccesstoken
+2. 复制你的访问令牌
+3. 在应用中输入 API Key 并点击"保存并进入主界面"
+
+### 2. 化学反应智能讲解
+
+1. 切换到"化学反应智能讲解"标签页
+2. 输入化学反应描述（如"铁与硫酸铜反应"）
+3. 点击"生成讲解"
+4. 等待 AI 生成详细的反应原理说明
+
+### 3. 化学方程式自动配平
+
+1. 切换到"化学方程式自动配平"标签页
+2. 输入未配平的方程式（如"Fe + O2 → Fe2O3"）
+3. 点击"配平方程式"
+4. 查看配平结果和步骤
+
+### 4. 反应现象文生图展示
+
+1. 切换到"反应现象文生图展示"标签页
+2. 输入反应现象描述（如"产生红棕色沉淀，剧烈冒泡并放热"）
+3. 点击"生成图像"
+4. 等待生成反应现象图像
+
+### 5. 实验物质识别
+
+1. 切换到"实验物质识别"标签页
+2. 点击图片区域选择要识别的图片
+3. 点击"识别物质"
+4. 查看 AI 识别结果和物质说明
+
+## 🔌 API 文档
+
+### 基础信息
+
+- **基础 URL**：http://127.0.0.1:5000
+- **API 前缀**：/api
+- **文档地址**：http://127.0.0.1:5000/docs
+
+### 健康检查
+
+```
+GET /api/health
+```
+
+### 化学反应讲解
+
+```
+POST /api/reaction/explain
+
+请求体：
+{
     "reaction": "铁与硫酸铜反应",
     "api_key": "your_api_key"
-  }'
+}
+
+响应：
+{
+    "success": true,
+    "data": "反应讲解内容..."
+}
 ```
 
-## 📖 验证清单
+### 方程式配平
 
-- [ ] Python 3.8+ 已安装
-- [ ] 所有依赖已成功安装（`pip list` 确认）
-- [ ] 获取了ModelScope API密钥
-- [ ] 应用可成功启动（检查`http://localhost:5000`）
-- [ ] 能在UI界面输入API Key并保存
-- [ ] 化学反应讲解功能正常工作
-- [ ] 方程式配平功能正常工作
-- [ ] 图像生成功能正常工作
-- [ ] 物质识别功能正常工作
+```
+POST /api/equation/balance
 
-## 🐛 常见问题
+请求体：
+{
+    "equation": "Fe + O2 → Fe2O3",
+    "api_key": "your_api_key"
+}
 
-### Q: 启动时出现"端口被占用"错误
-**A:** 修改 `backend_start.py` 中的端口号，或关闭占用5000端口的其他应用。
+响应：
+{
+    "success": true,
+    "data": "配平结果..."
+}
+```
 
-### Q: API请求超时
-**A:** 
-- 检查网络连接
-- 增加 `config.js` 中的超时时间
-- 确认ModelScope API密钥有效
+### 反应现象图生成
 
-### Q: 图像生成失败
-**A:**
-- 确保API Key有效且配额充足
-- 检查提示词内容（避免特殊字符）
-- 查看浏览器控制台的详细错误信息
+```
+POST /api/reaction/image
 
-### Q: 物质识别无法识别图片
-**A:**
-- 确保上传的是清晰的物质或器材图片
-- 图片格式应为常见格式（JPG、PNG等）
-- 检查API Key的权限
+请求体：
+{
+    "prompt": "产生红棕色沉淀，剧烈冒泡并放热",
+    "api_key": "your_api_key"
+}
 
-## 📚 API文档
+响应：
+{
+    "success": true,
+    "data": "image_url"
+}
+```
 
-启动后端后，可访问以下文档：
-- Swagger UI: `http://localhost:5000/docs`
-- ReDoc: `http://localhost:5000/redoc`
-- OpenAPI JSON: `http://localhost:5000/openapi.json`
+### 物质识别
 
-## 🌐 部署到ModelScope创空间
+```
+POST /api/material/recognize
 
-### 自动部署（推荐）
+请求体：
+{
+    "image_url": "data:image/jpeg;base64,...",
+    "api_key": "your_api_key"
+}
 
-项目已配置为创空间部署。只需执行：
+响应：
+{
+    "success": true,
+    "data": "识别结果..."
+}
+```
+
+## 🛠️ 技术栈
+
+### 后端
+- **框架**：FastAPI
+- **服务器**：Uvicorn
+- **数据验证**：Pydantic
+- **AI 集成**：LangChain + ModelScope
+
+### 前端
+- **HTML5**：页面结构
+- **CSS3**：响应式设计
+- **JavaScript**：交互逻辑
+- **无框架依赖**：轻量级实现
+
+### 部署
+- **Gradio**：魔搭平台部署
+- **Docker**：容器化部署（可选）
+
+## 📦 依赖说明
+
+```
+# 核心Web框架
+gradio==5.15.0          # Gradio 应用框架
+fastapi==0.120.0        # FastAPI 框架
+uvicorn==0.37.0         # ASGI 服务器
+pydantic==2.12.0a1      # 数据验证
+
+# AI与大模型集成
+langchain==1.0.2        # LLM 框架
+langchain-openai==1.0.1 # OpenAI 集成
+langchain-community==1.0.0a1  # 社区集成
+
+# 互联网与HTTP
+requests==2.32.5        # HTTP 请求库
+httpx==0.28.1           # 异步 HTTP 库
+
+# 工具与配置
+python-dotenv==1.1.1    # 环境变量管理
+```
+
+## 🔐 安全建议
+
+1. **API Key 管理**
+   - 不要在代码中硬编码 API Key
+   - 使用环境变量或配置文件管理
+   - 定期更新和轮换 API Key
+
+2. **CORS 配置**
+   - 生产环境应限制具体的域名
+   - 不要使用 `allow_origins=["*"]`
+
+3. **输入验证**
+   - 所有用户输入都经过 Pydantic 验证
+   - 后端进行二次验证
+
+## 🐛 故障排除
+
+### 后端启动失败
+
+**问题**：`ModuleNotFoundError: No module named 'backend'`
+
+**解决**：
+```bash
+# 确保在项目根目录运行
+cd /path/to/AI_Chemistry_Teaching_Assistant
+python start_app.py
+```
+
+### 前端无法连接后端
+
+**问题**：API 请求返回 CORS 错误
+
+**解决**：
+1. 确保后端服务正在运行
+2. 检查后端地址是否正确（默认 http://127.0.0.1:5000）
+3. 查看浏览器控制台的具体错误信息
+
+### API Key 无效
+
+**问题**：`401 Unauthorized`
+
+**解决**：
+1. 访问 https://www.modelscope.cn/my/myaccesstoken
+2. 确认 API Key 有效且未过期
+3. 重新输入 API Key
+
+### 图像生成超时
+
+**问题**：请求超时
+
+**解决**：
+1. 检查网络连接
+2. 尝试简化提示词
+3. 增加超时时间（修改 config.js 中的 TIMEOUTS）
+
+## 📝 开发指南
+
+### 添加新功能
+
+1. **后端**：在 `backend/` 中添加新模块
+2. **前端**：在 `frontend/assets/js/` 中添加新逻辑
+3. **API**：在 `backend/routes.py` 中定义新端点
+
+### 本地开发
 
 ```bash
-git add .
-git commit -m "Update Gradio app with improved UI design"
-git push
+# 启用热重载
+python backend_start.py  # 后端支持 --reload
+python frontend_start.py # 前端自动刷新
 ```
 
-创空间会自动识别 `.modelscope_config.json` 配置文件，使用 `gradio_app.py` 作为入口，启动Gradio应用。
+### 代码规范
 
-### 手动配置
-
-如需手动部署：
-
-1. **配置文件检查**
-   ```json
-   // .modelscope_config.json
-   {
-     "entry_file": "gradio_app.py",
-     "app_type": "gradio"
-   }
-   ```
-
-2. **依赖文件检查**
-   - 确保 `requirements.txt` 包含所有必需的包
-
-3. **环境变量设置**
-   - 创空间会自动配置 `GRADIO_PORT` 和 `PORT` 环境变量
-
-### 本地测试创空间部署
-
-```bash
-# 测试Gradio应用
-python gradio_app.py
-
-# 浏览器访问：http://localhost:7860
-```
-
-
-## 📝 开发规范
-
-### 项目约定
-
-- **本地开发**：使用 HTML5 前端 + FastAPI 后端
-- **云端部署**：使用 Gradio 应用（创空间）
-- **共用后端**：两种部署方式都调用同一套后端服务
-
-### 后端模块职责
-
-```
-backend/
-├── main.py              # 应用层：初始化、配置、异常处理
-├── routes.py            # 路由层：HTTP端点、请求分发
-├── models.py            # 数据模型层：Pydantic模型
-├── services.py          # 服务入口：路由到具体功能模块
-└── [功能模块]
-    ├── reaction_explainer.py        # 反应讲解
-    ├── equation_balancer.py         # 方程式配平
-    ├── reaction_image_generator.py  # 文生图
-    └── material_recognizer.py       # 物质识别
-```
-
-### 前端模块职责
-
-```
-frontend/
-├── assets/css/          # 样式管理
-│   ├── variables.css    # 全局变量
-│   ├── base.css         # 基础样式
-│   ├── layout.css       # 布局框架
-│   └── components.css   # 组件样式
-└── assets/js/           # 逻辑管理
-    ├── config.js        # 全局配置
-    ├── api.js           # HTTP通信
-    ├── ui.js            # DOM操作
-    └── app.js           # 应用入口
-```
-
-### 编码规范
-
-- **Python**: 遵循PEP 8
-- **JavaScript**: 使用ES6+，避免全局变量
-- **CSS**: 使用BEM命名法
-- **Git**: 提交信息要清晰明确
-
+- Python：PEP 8
+- JavaScript：ES6+
+- CSS：BEM 命名规范
 
 ## 📄 许可证
 
 MIT License
 
-## 🙏 贡献
+## 🤝 贡献
 
-欢迎提交Issue和Pull Request！
+欢迎提交 Issue 和 Pull Request！
+
+## 📞 联系方式
+
+- 项目地址：https://github.com/Reedfoley/AI_Chemistry_Teaching_Assistant
+- 问题反馈：提交 GitHub Issue
+
+## 🎯 未来计划
+
+- [ ] 支持更多化学反应类型
+- [ ] 添加实验视频演示
+- [ ] 支持离线模式
+- [ ] 移动端应用
+- [ ] 教师管理后台
+- [ ] 学生学习进度追踪
+
+## 📚 参考资源
+
+- [FastAPI 文档](https://fastapi.tiangolo.com/)
+- [LangChain 文档](https://python.langchain.com/)
+- [ModelScope 文档](https://modelscope.cn/docs)
+- [Gradio 文档](https://www.gradio.app/)
 
 ---
 
-**最后更新:** 2025年10月31日  
-**版本:** 3.0.0  
-**当前部署方式:** Gradio应用（创空间） + FastAPI后端 + HTML5前端  
-**专为乡村教育设计，提升教学效率，弥补实验资源不足**
+**专为乡村教育设计，提升教学效率，弥补实验资源不足** 🌾✨

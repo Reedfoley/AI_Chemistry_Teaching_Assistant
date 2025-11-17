@@ -343,10 +343,10 @@ def generate_reaction_image(prompt: str, api_key: str) -> str:
             
         builder  = StateGraph(State, context_schema=ContextSchema)
 
-        builder .add_node("generate_prompt_node", generate_prompt_node)
-        builder .add_node("eval_prompt_node", eval_prompt_node)
-        builder .add_node("generate_image_node", generate_image_node)
-        builder .add_node("eval_image_node", eval_image_node)
+        builder.add_node("generate_prompt_node", generate_prompt_node)
+        builder.add_node("eval_prompt_node", eval_prompt_node)
+        builder.add_node("generate_image_node", generate_image_node)
+        builder.add_node("eval_image_node", eval_image_node)
 
         builder.add_edge(START, "generate_prompt_node")
         builder.add_edge("generate_prompt_node", "eval_prompt_node")
@@ -373,7 +373,7 @@ def generate_reaction_image(prompt: str, api_key: str) -> str:
             
         graph = builder.compile()
         
-        response = graph.invoke({"messages": [{"role": "user", "content": "氢气和氧气生成水"}]}, context={"api_key": api_key})
+        response = graph.invoke({"messages": [{"role": "user", "content": prompt}]}, context={"api_key": api_key})
         
         return response["image_url"]
         

@@ -97,8 +97,7 @@ if __name__ == "__main__":
     
     # 从环境变量获取API密钥
     api_key = os.getenv("modelscope_API_KEY")
-    if not api_key:
-        raise ValueError("未设置modelscope_API_KEY环境变量")
+    
     
     reaction = "铁与硫酸铜的置换反应"
     

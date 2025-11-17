@@ -51,7 +51,6 @@ const UIService = {
                 
                 // 物质识别
                 materialImageInput: document.getElementById('material-image-input'),
-                fileNameDisplay: document.getElementById('file-name'),
                 recognizeMaterialBtn: document.getElementById('recognize-material'),
                 clearMaterialBtn: document.getElementById('clear-material'),
                 materialRecognitionLoading: document.getElementById('material-recognition-loading'),
@@ -70,12 +69,14 @@ const UIService = {
             for (const [key, value] of Object.entries(this.elements)) {
                 if (value === null && !['tabs', 'tabContents'].includes(key)) {
                     missingElements.push(key);
+                    console.warn(`[UIService] 缺失元素: ${key}`);
                 }
             }
             
             if (missingElements.length > 0) {
-                console.warn('[UIService] 缺失的DOM元素:', missingElements);
-                throw new Error(`缺失的DOM元素: ${missingElements.join(', ')}`);
+                console.error('[UIService] 缺失的DOM元素:', missingElements);
+                // 不抛出错误，继续运行
+                console.warn('[UIService] 继续运行，某些功能可能不可用');
             }
             
             console.log('[UIService] UI 初始化完成');
@@ -90,15 +91,21 @@ const UIService = {
      */
     showMainContent() {
         try {
+            console.log('[UIService] showMainContent 被调用');
             if (!this.elements) {
                 console.error('[UIService] 元素未初始化');
                 return;
             }
+            console.log('[UIService] apiKeyContainer:', this.elements.apiKeyContainer ? '存在' : '不存在');
+            console.log('[UIService] mainContent:', this.elements.mainContent ? '存在' : '不存在');
+            
             if (this.elements.apiKeyContainer) {
                 this.elements.apiKeyContainer.style.display = 'none';
+                console.log('[UIService] apiKeyContainer 已隐藏');
             }
             if (this.elements.mainContent) {
                 this.elements.mainContent.style.display = 'block';
+                console.log('[UIService] mainContent 已显示');
             }
         } catch (error) {
             console.error('[UIService] showMainContent 失败:', error);
@@ -125,10 +132,13 @@ const UIService = {
      * 隐藏 API Key 容器
      */
     hideApiKeyContainer() {
+        console.log('[UIService] hideApiKeyContainer 被调用');
         if (!this.elements || !this.elements.apiKeyContainer) {
+            console.error('[UIService] apiKeyContainer 不存在');
             return;
         }
         this.elements.apiKeyContainer.style.display = 'none';
+        console.log('[UIService] apiKeyContainer 已隐藏');
     },
     
     /**
@@ -251,7 +261,7 @@ const UIService = {
     setMaterialImagePreview(file) {
         if (!file) {
             this.elements.materialImagePreview.style.display = 'none';
-            this.elements.materialImagePlaceholder.style.display = 'block';
+            this.elements.materialImagePlaceholder.style.display = 'flex';
             return;
         }
         
@@ -266,12 +276,11 @@ const UIService = {
     
     clearMaterial() {
         this.elements.materialImageInput.value = '';
-        this.elements.fileNameDisplay.textContent = '未选择文件';
         this.elements.materialRecognitionContent.innerHTML = '';
         this.elements.materialRecognitionResult.style.display = 'none';
         this.elements.materialImagePreview.src = '';
         this.elements.materialImagePreview.style.display = 'none';
-        this.elements.materialImagePlaceholder.style.display = 'block';
+        this.elements.materialImagePlaceholder.style.display = 'flex';
     },
     
     // ==================== 加载状态 ====================

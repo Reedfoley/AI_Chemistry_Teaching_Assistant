@@ -28,13 +28,17 @@ const App = {
             UIService.showApiKeyContainer();
             console.log('[App] API Key 输入界面显示完成');
             
-            console.log('[App] 应用初始化完成');
+            console.log('[App] 应用初始化完成 ✓');
         } catch (error) {
             console.error('[App] 初始化失败:', error);
             console.error('[App] 错误信息:', error.message);
             console.error('[App] 错误堆栈:', error.stack);
-            if (UIService.elements.errorMessage) {
-                UIService.showError('应用初始化失败，详情请查看控制台错误信息: ' + error.message);
+            try {
+                if (UIService && UIService.elements && UIService.elements.errorMessage) {
+                    UIService.showError('应用初始化失败，详情请查看控制台错误信息: ' + error.message);
+                }
+            } catch (e) {
+                console.error('[App] 显示错误信息失败:', e);
             }
         }
     },
@@ -43,9 +47,12 @@ const App = {
     // ==================== API Key 管理 ====================
     
     handleSaveApiKey() {
+        console.log('[App] handleSaveApiKey 被调用');
         const apiKey = UIService.getApiKey();
+        console.log('[App] 获取的 API Key 长度:', apiKey ? apiKey.length : 0);
         
         if (!apiKey || apiKey.trim() === '') {
+            console.warn('[App] API Key 为空');
             UIService.showError('请输入 API Key');
             return;
         }
@@ -53,13 +60,15 @@ const App = {
         // 保存 API Key
         this.apiKey = apiKey.trim();
         
-        console.log('[App] API Key 已保存');
+        console.log('[App] API Key 已保存，长度:', this.apiKey.length);
         UIService.showSuccess('API Key 已保存！');
         
         // 延迟 1 秒后显示主内容
         setTimeout(() => {
+            console.log('[App] 准备显示主内容...');
             UIService.hideApiKeyContainer();
             UIService.showMainContent();
+            console.log('[App] 主内容已显示');
         }, 1000);
     },
     
@@ -134,11 +143,9 @@ const App = {
                 UIService.elements.materialImageInput.addEventListener('change', (e) => {
                     const file = e.target.files[0];
                     if (file) {
-                        UIService.elements.fileNameDisplay.textContent = file.name;
                         // 设置图片预览
                         UIService.setMaterialImagePreview(file);
                     } else {
-                        UIService.elements.fileNameDisplay.textContent = '未选择文件';
                         UIService.setMaterialImagePreview(null);
                     }
                 });
@@ -287,15 +294,26 @@ const App = {
 };
 
 // 页面加载完成后初始化应用
+console.log('[App] 脚本加载完成，document.readyState:', document.readyState);
+
 if (document.readyState === 'loading') {
+    console.log('[App] DOM 正在加载，等待 DOMContentLoaded 事件...');
     document.addEventListener('DOMContentLoaded', () => {
         console.log('[App] DOMContentLoaded 事件触发');
-        App.init();
+        try {
+            App.init();
+        } catch (error) {
+            console.error('[App] 初始化时发生错误:', error);
+        }
     });
 } else {
     // 如果脚本加载时 DOM 已经准备好
     console.log('[App] DOM 已准备好，直接初始化');
-    App.init();
+    try {
+        App.init();
+    } catch (error) {
+        console.error('[App] 初始化时发生错误:', error);
+    }
 }
 
 // 导出应用
