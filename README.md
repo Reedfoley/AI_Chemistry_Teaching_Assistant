@@ -68,7 +68,7 @@ AI_Chemistry_Teaching_Assistant/
 
 ### 前置要求
 
-- Python 3.7+
+- Python 3.11+
 - pip 包管理器
 - ModelScope API Key（获取地址：https://www.modelscope.cn/my/myaccesstoken）
 
