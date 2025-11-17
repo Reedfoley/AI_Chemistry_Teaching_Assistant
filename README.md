@@ -1,30 +1,3 @@
----
-title: 乡村化学教师AI教学助手
-description: 专为乡村教育设计的智能化学教学辅助系统，集成AI讲解、方程式配平、现象可视化和物质识别等功能
-author: Datawhale
-version: 3.0.0
-language: zh-CN
-tags:
-  - Chemistry
-  - Education
-  - AI Assistant
-  - Gradio UI
-  - FastAPI Backend
-  - ModelScope API
-platform: ModelScope Studio
-repository: https://www.modelscope.cn/studios/Datawhale/AI_Chemistry_Teaching_Assistant
-license: Apache License 2.0
-keywords:
-  - 化学教育
-  - AI助手
-  - 乡村教育
-  - 实验辅助
-  - 智能讲解
-  - Gradio应用
-created: 2025-10-27
-updated: 2025-10-31
----
-
 # 🧪 乡村化学教师AI教学助手
 
 一个为乡村教育设计的智能化学教学辅助系统，利用大模型技术提升教学效率，弥补实验资源不足。
