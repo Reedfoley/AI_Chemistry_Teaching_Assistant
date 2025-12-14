@@ -38,7 +38,7 @@ def generate_reaction_image(prompt: str, api_key: str) -> str:
             image_generation_count: int
 
         generate_prompt_model = ChatOpenAI(
-            api_key="ms-fb065d50-eedf-41e5-9bc0-7700362c0c45",
+            api_key=api_key,
             model="Qwen/Qwen3-VL-30B-A3B-Instruct",
             base_url="https://api-inference.modelscope.cn/v1",
             temperature=0.7
